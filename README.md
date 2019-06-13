@@ -71,9 +71,8 @@ In the next few steps we will try four different approches to run the app:
 
 ### So lets get started
 
-It will be much simplier to have the same codebase so open your PowerShell and clone my repository. 
+It will be much simplier to have the same codebase so open your PowerShell and clone [my repository](https://github.com/szczepanbh/shkube). 
 
-CLONE
 
 We can find here the simplest possible asp.net core application which should display a `Message` from 
 `appsettings.json` and your `machine name`. If you have installed .NET Core Runtime you can build
