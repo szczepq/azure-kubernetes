@@ -1,23 +1,23 @@
-﻿# Deploying .NET Core application in Azure Kubernetes Claster in less then 5$
+﻿# Deploying .NET Core application in Azure Kubernetes Cluster in less than 5$
 
 Microservice architecture and docker are becoming more and more popular these days. 
 In this article, I will shortly brief you through some main terminologies and show you how to:
 
-* Dockerise an .NET Core application
+* Dockerise an ASP .NET Core application
 * Create and run docker image
-* Use this image in your local kubernetes claster
+* Use this image in your local kubernetes cluster
 * Create Azure Container Register and push your image there
 * Setup Azure Kubernetes Service and connect it to ACR
-* Scale you claster and change number of replicas
+* Scale you cluster and change number of replicas
 * And the most important: how to clean all those mess
 
 ### What you need to know:
-* Microserice architecture is an approche to split aplication to small, 
-single responsible services which could be developed and scaled separately instead of one big monolit application
-* Containter is a nano-server which can be use instead virtuall machines as a host for an app
+* Microservice architecture is an approache to split application to small, 
+single responsible services which could be developed and scaled separately instead of one big monolith application
+* Container is a nano-server which can be use instead virtual machines as a host for an app
 * Container register is a place where you can store and share your containerized apps images
 * Docker is a tool designed to make it easier to create, deploy, and run applications by using containers
-* Kubernetes is the most popolar orchestration tool. It's used for managing containerized workloads and services, 
+* Kubernetes is the most popular orchestration tool. It's used for managing containerized workloads and services, 
 that facilitates both declarative configuration and automation.
 
 By default Docker uses Docked Swarm for an orchestration but in a new version of Docker Desktop (both for macOS or Windows) you can change that to use Kubernetes.
@@ -63,20 +63,20 @@ By default Docker uses Docked Swarm for an orchestration but in a new version of
 * Install [Azure CLI](https://docs.microsoft.com/pl-pl/cli/azure/install-azure-cli?view=azure-cli-latest) - we will need that a little bit later
 
 ## Run the app
-In the next few steps we will try four different approches to run the app:
-* localy
+In the next few steps we will try four different approaches to run the app:
+* locally
 * via local docker instance
 * via your local kubernetes instance
 * via kubernetes on an azure
 
 ### So lets get started
 
-It will be much simplier to have the same codebase so open your PowerShell and clone [my repository](https://github.com/szczepanbh/shkube). 
+It will be much simpler to have the same codebase so open your PowerShell and clone [my repository](https://github.com/szczepanbh/shkube). 
 
 
 We can find here the simplest possible asp.net core application which should display a `Message` from 
 `appsettings.json` and your `machine name`. If you have installed .NET Core Runtime you can build
-and run the app localy without docker:
+and run the app locally without docker:
 * navigate to project folder `SHKube`
 * run the application `dotnet run`
 
@@ -88,10 +88,10 @@ We should see the name of our machine.
 </p>
 
 
-### Now it's time to dozkerize our app
+### Now it's time to dockerize our app
 
 There are at least two ways to build and run an app inside docker: via command line only or by using `Dockerfile`. 
-I thing that second approche is more readable so I will use it in this example so please take a look at the `Dockerfile` 
+I thing that second approache is more readable so I will use it in this example so please take a look at the `Dockerfile` 
 inside a project folder.
 
 ```
@@ -116,7 +116,7 @@ ENTRYPOINT ["dotnet", "SHKube.dll"]
 ```
 
 What we have here is a **multi-stage build**. We are using two image from [DockerHub](https://hub.docker.com/). 
-* `mcr.microsoft.com/dotnet/core/sdk:2.2-stretch` is used to build an app - it contains .NET Core SDK which is necessery to build a our app
+* `mcr.microsoft.com/dotnet/core/sdk:2.2-stretch` is used to build an app - it contains .NET Core SDK which is necessary to build a our app
 * `mcr.microsoft.com/dotnet/core/aspnet:2.2-stretch-slim` which is lighter and contains only .NET Core Runtime to run our app
 
 So lets build a new image with our app.
@@ -134,7 +134,7 @@ docker image list | select -First 2
 
 or just `docker image list` to see all images.
 
-And finaly let's run this image 
+And finally let's run this image 
 
 ```
 docker run -d -p 5000:80 shkube:local
@@ -159,10 +159,10 @@ docker container rm -f $(docker ps -aq)
 
 to clean everything.
 
-### We can not move to kubernetes
+### We can now move to kubernetes
 
 Open docker settings and open **Kubernetes** tab and select two checkboxes like on a screen below. 
-Wait for instalation to finish. It should look very similar for macOS users.
+Wait for installation to finish. It should look very similar for macOS users.
 
 <p align="center">
   <img src="img/docker-kubernetes.jpg" title="docker kubernetes" />
@@ -192,7 +192,7 @@ Wait for instalation to finish. It should look very similar for macOS users.
 
 
 
-As with Dockerfile we can use **yml file** to have all configuration necessery for kubernetes in one place. 
+As with **Dockerfile** we can use **yml file** to have all configuration necessary for kubernetes in one place. 
 
 Open **shkubedeploy.yml**
 
@@ -246,7 +246,7 @@ spec:
 We have just created a new **Deployment** for kubernetes. 
 It contains one service named `shkube-service` which expose port `80` and contains one instance `replicas: 1`
 of our container image `shkube:local`. Containers are ephemeral. It could just die. Kubernetes will take care to run a new instance 
-of our container if it happens. It is recommander to have at least three instance. We will scale it up a later.
+of our container if it happens. It is recommended to have at least three instance. We will scale it up a later.
 Now we have to run our deployment.
 
 
@@ -277,7 +277,7 @@ Now we should see the name of deployment.
 
 
 
-### Lets's clean this mess:
+### Let's clean this mess:
 
 
 ```
@@ -303,14 +303,14 @@ Login to Azure from PowerShell.
 az login
 ```
 
-Create Resourse Group/
+Create Resource Group/
 
 ```
 az group create -n shkuberg -l westeurope
 ```
 
 * `-n` stands for name
-* `-l` stands for region (I have picked up West Europ because it's the closest one but it doesn't matter in this case)
+* `-l` stands for region (I have picked up West Europe because it's the closest one but it doesn't matter in this case)
 
 
 Next create AZURE CONTAINER REGISTER
@@ -336,7 +336,7 @@ And login to ACR.
 az acr login -n shkubeacr 
 ```
 
-New lets tag to our existing image to match the ACR name. Use `loginServer` that you have storred before.
+New lets tag to our existing image to match the ACR name. Use `loginServer` that you have stored before.
 
 ```
 docker tag shkube:local shkubeacr.azurecr.io/shkube:v1
@@ -354,7 +354,7 @@ We now see two images with the same ID but different tags. Push an image to the 
 docker push shkubeacr.azurecr.io/shkube:v1
 ```
 
-And check if it is t.here
+And check if it is there
 
 ```
 az acr repository list -n shkubeacr -o table
@@ -388,12 +388,12 @@ az role assignment create --assignee "cfed7ab3-8db9-4bba-86c9-2311d505d2ad" --ro
 
 And you are done with permissions.
 
-### Lets Azure Kubernetes Service
+### Let's Azure Kubernetes Service
 
 
 ```
 az aks create `
- --name shkubeaksclaster `
+ --name shkubeakscluster `
  --resource-group shkuberg `
  --node-count 1 `
  --generate-ssh-keys `
@@ -416,26 +416,26 @@ cat C:\Users\{yourLocalUserName}\.kube\config | more
 ```
 
 <p align="center">
-  <img src="img/kubernetes-claster.jpg" title="docker kubernetes" />
+  <img src="img/kubernetes-cluster.jpg" title="docker kubernetes" />
 </p>
 
 You should see **localhost** here but we have to add the one from Azure.
 
 ```
-az aks get-credentials --name shkubeaksclaster --resource-group shkuberg
+az aks get-credentials --name shkubeakscluster --resource-group shkuberg
 ```
 
 Check again.
 
 ```
-cat C:\Users\szcze\.kube\config | sls "shkubeaksclaster"
+cat C:\Users\{yourLocalUserName}\.kube\config | sls "shkubeakscluster"
 ```
 
 <p align="center">
-  <img src="img/kubernetes-azure-claster.jpg" title="docker kubernetes" />
+  <img src="img/kubernetes-azure-cluster.jpg" title="docker kubernetes" />
 </p>
 
-Lets check a list of nodes.
+Let's check a list of nodes.
 
 ```
 kubectl get nodes
@@ -451,7 +451,7 @@ Open `shkubedeploy.yml` file and change `image` to the one from ACR instead of l
 and change the service spec type to LoadBalancer instead of NodePort because we are on azure now.
 
 <p align="center">
-  <img src="img/sh-kube-deploy-azure-1.jpg" title="kube deployment configuration for azure" />
+  <img src="img/sh-kube-deploy-azure-v1.jpg" title="kube deployment configuration for azure" />
 </p>
 
 
@@ -507,17 +507,17 @@ Copy an IP and checkout in a browser.
 </p>
 
 
-We can now increse a number of kubernetes clasters
+We can now increase a number of kubernetes clusters
 
 ```
 kubectl get nodes
-az aks scale --name shkubeaksclaster --resource-group shkuberg `
+az aks scale --name shkubeakscluster --resource-group shkuberg `
  --node-count 3
 kubectl get nodes
 ```
 
 <p align="center">
-  <img src="img/3-clasters.jpg" title="3 clasters" />
+  <img src="img/3-clusters.jpg" title="3 clusters" />
 </p>
 
 or change the number of replicas.
@@ -534,7 +534,7 @@ kubectl get deployment
 
 **But how to update our application now?**
 
-Lets change a `Message` in `appsettings.json` to **Hello azure: ". 
+Let's change a `Message` in `appsettings.json` to **Hello azure: ". 
 As before we have to build a new image and push it to register.
 
 ```
@@ -584,22 +584,22 @@ Refresh your browse and you should see a new message!
 ```
 kubectl delete -f .\shkubedeploy.yml
 ```
-* Remove kubernetes clasters
+* Remove kubernetes clusters
 ```
-az aks delete --name shkubeaksclaster --resource-group shkuberg
+az aks delete --name shkubeakscluster --resource-group shkuberg
 ```
-* Remove container registr
+* Remove container register
 ```
 az acr delete -n shkubeacr
 ```
-* Remove resourse group
+* Remove resource group
 ```
 az group delete --name shkuberg
 ```
 * And switch back to your local kubernetes context
 ```
 kubectl config use-context docker-for-desktop
-kubectl config unset contexts.shkubeaksclaster
+kubectl config unset contexts.shkubeakscluster
 ```
 
 
