@@ -1,4 +1,4 @@
-﻿# Deploying .NET Core application in Azure Kubernetes Cluster in less than 5$
+﻿# Deploying .NET Core application to Azure Kubernetes Cluster in less than 5$
 
 Microservice architecture and docker are becoming more and more popular these days. 
 In this article, I will shortly brief you through some main terminologies and show you how to:
@@ -602,4 +602,17 @@ kubectl config use-context docker-for-desktop
 kubectl config unset contexts.shkubeakscluster
 ```
 
+
+## Summary
+
+Do you remember those times when your app was working locally but now on a production and how hard it is to debug? 
+And this strange behaviour when your single-node was scaled horizontally and can't figure  out what it wrong?
+
+We have walked through a long journey to proof that now it can be done better.
+
+* We have run **the same ASP.NET Core application** locally and inside docker container. 
+* We have used **the same docker container image** with and without kubernetes. 
+* We have used **the same kubernetes deployment configuration** on our workstation and then on Azure.
+
+And we have made it in less than 5$ ;)
 
