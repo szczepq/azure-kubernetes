@@ -12,7 +12,7 @@ In this article, I will shortly brief you through some main terminologies and sh
 * And the most important: how to clean all those mess
 
 ### What you need to know:
-* Microservice architecture is an approache to split application to small, 
+* Microservice architecture is an approach to split application to small, 
 single responsible services which could be developed and scaled separately instead of one big monolith application
 * Container is a nano-server which can be use instead virtual machines as a host for an app
 * Container register is a place where you can store and share your containerized apps images
@@ -22,8 +22,8 @@ that facilitates both declarative configuration and automation.
 
 By default Docker uses Docked Swarm for an orchestration but in a new version of Docker Desktop (both for macOS or Windows) you can change that to use Kubernetes.
 
-## Prerequirements
-* Have a macOS or Windows operation system (it should work as well on linux but this article won't cover that)
+## Pre-requirements
+* Have a macOS or Windows operation system (it should work as well on Linux but this article won't cover that)
 * Enable Hyper-V on your machine if you haven't done it yet (for windows users only)
 * Install or update [Docker Desktop](https://hub.docker.com/?overlay=onboarding)
 
@@ -69,7 +69,7 @@ In the next few steps we will try four different approaches to run the app:
 * via your local kubernetes instance
 * via kubernetes on an azure
 
-### So lets get started
+### So let's get started
 
 It will be much simpler to have the same codebase so open your PowerShell and clone [my repository](https://github.com/szczepanbh/shkube). 
 
@@ -91,7 +91,7 @@ We should see the name of our machine.
 ### Now it's time to dockerize our app
 
 There are at least two ways to build and run an app inside docker: via command line only or by using `Dockerfile`. 
-I thing that second approache is more readable so I will use it in this example so please take a look at the `Dockerfile` 
+I thing that second approach is more readable so I will use it in this example so please take a look at the `Dockerfile` 
 inside a project folder.
 
 ```
@@ -119,7 +119,7 @@ What we have here is a **multi-stage build**. We are using two image from [Docke
 * `mcr.microsoft.com/dotnet/core/sdk:2.2-stretch` is used to build an app - it contains .NET Core SDK which is necessary to build a our app
 * `mcr.microsoft.com/dotnet/core/aspnet:2.2-stretch-slim` which is lighter and contains only .NET Core Runtime to run our app
 
-So lets build a new image with our app.
+So letls build a new image with our app.
 
 ```
 docker build . -t shkube:local
